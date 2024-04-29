@@ -53,14 +53,12 @@
           return response.json();
         })
         .then(data => {
-          if(data.message === "done"){
+          if(data.message === " done"){
             alert(`${data.trip.tripname} added to trips`);
+            event.target.reset(); // Reset the form fields
+            console.log(data);
           } else if(data.message === "trip exist"){
             alert(`This trip already exists`);
-          }
-          if(data.message === "done"){
-            alert("successfully added the trip")
-            console.log(data);
           }
         })
         .catch(error => {

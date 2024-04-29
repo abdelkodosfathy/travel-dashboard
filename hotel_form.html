@@ -54,8 +54,9 @@
       return response.json();
     })
     .then(data => {
-      if(data.message === "done"){
+      if(data.message === " done"){
         alert(`${data.hotel.name} added to hotels`);
+        event.target.reset();
       }
       else if(data.message === "hotel exist"){
         alert(`This hotel already exists`);

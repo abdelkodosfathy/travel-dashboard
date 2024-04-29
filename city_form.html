@@ -55,6 +55,8 @@
       .then(data => {
         if(data.message === "done"){
           alert(`${data.city.cityname} added to cities`)
+          event.target.reset(); // Reset the form fields
+
         }
         else if(data.message === "city exist"){
           alert(`this city is already exist`)
