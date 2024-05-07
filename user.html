@@ -88,6 +88,7 @@
 
     </script>
     <script>
+
       // function sendEmail() {
       //   Email.send({
       //       Host: "smtp.gmail.com",
@@ -197,6 +198,7 @@
           })
           .then(function(response) {
             alert('Email sent successfully!');
+            location.reload();
           }, function(error) {
             console.log(error);
           });
@@ -218,6 +220,8 @@
         })
         .then(function(response) {
           alert('Email sent successfully!');
+          location.reload();
+
         }, function(error) {
           console.log(error);
         });

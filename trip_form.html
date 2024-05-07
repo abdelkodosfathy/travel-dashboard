@@ -42,6 +42,7 @@
       if(formData.get('tripname') == "" || formData.get('cityname') == "" || formData.get('price') == "" || formData.get('duration') == ""){
         // Handle validation errors
       } else {
+        console.log("fetching");
         fetch('https://projectone-h83j.onrender.com/trip/create', {
           method: 'POST',
           body: formData,
