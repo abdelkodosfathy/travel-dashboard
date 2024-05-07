@@ -4,6 +4,8 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+
     <title>Users</title>
 </head>
 
@@ -28,7 +30,7 @@
           <a class="nav-link " href="program.html">Program</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="user.html">User</a>
+          <a class="nav-link active" href="user.html">Booking</a>
         </li>
         <li class="nav-item">
           <a class="nav-link " href="trip_reservation.html">Trip Resevation</a>
@@ -43,23 +45,20 @@
     <div class="container justify-content-between">
         <h3>All Users</h3>
         <hr>
-
         <a class="btn btn-primary btn-small mb-3 " href="user_form.html">
             Add user</a>
         <table class="table table-border table-striped text-center">
             <thead class="table-dark">
                 <tr>
-                    <th>Id</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
-                    <th>passport no</th>
-                    <th>Action</th>
+                    <th>Requests</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="fw-bold fs-4">1</td>
+                    <!-- <td class="fw-bold fs-4">1</td>
                     <td class="fw-bold fs-4">John</td>
                     <td class="fw-bold fs-4">Doe</td>
                     <td class="fw-bold fs-4">jonDoh@mail.com</td>
@@ -68,11 +67,162 @@
                     <td>
                         <a class="btn btn-info btb-sm" href="user_form.html">Update</a>
                         <a class="btn btn-danger btb-sm">Delete</a>
+                    </td> -->
+                    <td colspan="5">
+                      <div class="loading-icon">
+                        <div class="loader"></div>  
+                      </div>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <!-- <button id="send-email">Send Email</button> -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js">
+    </script>
+    <script>
+      // document.getElementById('send-email').addEventListener('click', function() {
+
+      // });
+
+
+    </script>
+    <script>
+      // function sendEmail() {
+      //   Email.send({
+      //       Host: "smtp.gmail.com",
+      //       Username: "abdelkodosfathy@gmail.com",
+      //       Password: "Enter your password",
+      //       To: 'receiver@email_address.com',
+      //       From: "sender@email_address.com",
+      //       Subject: "Sending Email using javascript",
+      //       Body: "Well that was easy!!",
+      //   })
+      //   .then(function (message) {
+      //       alert("mail sent successfully")
+      //   });
+      // }
+      const userTable = document.querySelector("table tbody");
+      fetch("https://projectone-h83j.onrender.com/boking").then(r => {
+        console.log("fect");
+          return r.json();    
+      }).then(e =>{
+        console.log(e);
+        console.log(e.book);
+        userTable.innerHTML = '';
+        const users = e.book;
+        users.forEach((user, i) => {
+          console.log(user.fname);
+          users.push(user);
+          const cell = document.createElement('td');
+          // cell.innerHTML = ``;
+          if(user.userApplied.trip){
+            cell.appendChild(createTrip(user));
+          }
+          if(user.userApplied.hotel){
+            cell.appendChild(createHotel(user));
+          }
+          if(user.userApplied.program){
+            cell.appendChild(createProgram(user));
+          }
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="fw-bold fs-4">${user.fname}</td>
+            <td class="fw-bold fs-4">${user.lname}</td>
+            <td class="fw-bold fs-4">${user.email}</td>
+            <td class="fw-bold fs-4">
+              ${cell.innerHTML}
+            </td>
+          `;
+          userTable.appendChild(row);
+        });
+      })
+      //create cell contain the request came from user
+      function createTrip(user, mail) {
+        const cell = document.createElement("div");
+        console.log(user);
+        cell.innerHTML = `
+        <p>Trip:
+          <span>
+            ${user.userApplied.trip}
+          </span>
+        </p>
+        <button class="btn btn-success btb-sm" onclick="sendEmail('${user.email}','trip', '${user._id}')">Accept</button> 
+        <button class="btn btn-danger btb-sm" onclick="deny('${user._id}', 'trip','${user.email}')">Deny</button> 
+        `
+        return cell;
+      }
+      function createProgram(user, mail) {
+        const cell = document.createElement("div");
+        console.log(user);
+        cell.innerHTML = `
+        <p>Program: 
+          <span>
+            ${user.userApplied.program}
+          </span>
+        </p>
+        <button class="btn btn-success btb-sm" onclick="sendEmail('${user.email}','program', '${user._id}')">Accept</button> 
+        <button class="btn btn-danger btb-sm" onclick="deny('${user._id}', 'program','${user.email}')">Deny</button> 
+        `
+        return cell;
+      }
+      function createHotel(user, mail) {
+        const cell = document.createElement("div");
+        console.log(user);
+        cell.innerHTML = `
+        <p>Hotel: 
+          <span>
+            ${user.userApplied.hotel}
+          </span>
+        </p>
+        <button class="btn btn-success btb-sm" onclick="sendEmail('${user.email}','hotel', '${user._id}')">Accept</button> 
+        <button class="btn btn-danger btb-sm" onclick="deny('${user._id}', 'hotel','${user.email}')">Deny</button> 
+        `
+        return cell;
+      }
+      function deny(userId, booked, email){
+          fetch("https://projectone-h83j.onrender.com/boking/"+userId, {
+            method: "delete",
+          }).then(e => {
+            console.log(e.json());
+          })
+          emailjs.init('2zfkPglAASUTHS0mj');
+          console.log("sending...");
+          emailjs.send('service_nozwvpx', 'template_kxd2di5', {
+            from_name: 'KeyOfTravel',
+            from_email: 'keyoftravel1@gmail.com',
+            to_email: `${email}`,
+            subject: 'Key of travel',
+            message: `We are sorry that your ${booked} request has been denied..`
+          })
+          .then(function(response) {
+            alert('Email sent successfully!');
+          }, function(error) {
+            console.log(error);
+          });
+      }
+      function sendEmail(email,booked,userId){
+        fetch("https://projectone-h83j.onrender.com/boking/"+userId, {
+            method: "delete",
+          }).then(e => {
+            console.log(e.json());
+          })
+        emailjs.init('2zfkPglAASUTHS0mj');
+        console.log("sending...");
+        emailjs.send('service_nozwvpx', 'template_kxd2di5', {
+          from_name: 'KeyOfTravel',
+          from_email: 'keyoftravel1@gmail.com',
+          to_email: `${email}`,
+          subject: 'Key of travel',
+          message: `We are pleased to inform you that your ${booked} request has been accepted..`
+        })
+        .then(function(response) {
+          alert('Email sent successfully!');
+        }, function(error) {
+          console.log(error);
+        });
+      }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
