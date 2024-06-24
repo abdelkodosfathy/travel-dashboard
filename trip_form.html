@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,41 +8,36 @@
 </head>
 <body>
 
+  <div class="container">
+    <h3>Trip Directory</h3>
 
-    <div class="container">
-      <h3>Trip Directory</h3>
+    <hr>
 
-      <hr>
+    <p class="h4 mb-4">Save Trip</p>
 
-      <p class="h4 mb-4">Save Trip</p>
+    <form action="#" method="post" enctype="multipart/form-data">
+      <input type="text" name="tripname" class="form-control mb-4 w-25" placeholder="Trip Name">
+      <input type="text" name="cityname" class="form-control mb-4 w-25" placeholder="City Name">
+      <input type="text" name="price" class="form-control mb-4 w-25" placeholder="Price">
+      <input type="text" name="duration" class="form-control mb-4 w-25" placeholder="Duration per Hour">
+      <input type="date" name="tripDate" class="form-control mb-4 w-25" placeholder="Start Date">
+      <input type="file" name="trip" class="form-control mb-4 w-25" accept="image/*" multiple>
+      <button type="submit" class="btn btn-info col-2">Save</button>
+    </form>
+    <br>
 
-      <form action="#" method="post" enctype="multipart/form-data">
-        <input type="text" name="tripname" class="form-control mb-4 w-25" placeholder="Trip Name">
-        <input type="text" name="cityname" class="form-control mb-4 w-25" placeholder="City Name">
-        <input type="text" name="price" class="form-control mb-4 w-25" placeholder="Price">
-        <input type="text" name="duration" class="form-control mb-4 w-25" placeholder="Duration per Hour">
-        <input type="file" name="trip" class="form-control mb-4 w-25" accept="image/*" multiple>
-        <button type="submit" class="btn btn-info col-2">Save</button>
-      </form>
-      <br>
+    <a href="trip.html" class="link-offset-2 link-underline link-underline-opacity-0">Back to Trip Dashboard</a>
+  </div>
 
-      <a href="trip.html" class="link-offset-2 link-underline link-underline-opacity-0 ">Back to Trip Dashbord</a>
-    </div>
-
-
-
-
-
-
-
-<script>
+  <script>
     document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
-
+      console.log("trips start");
       const formData = new FormData(event.target);
 
-      if(formData.get('tripname') == "" || formData.get('cityname') == "" || formData.get('price') == "" || formData.get('duration') == ""){
+      if (formData.get('tripname') == "" || formData.get('cityname') == "" || formData.get('price') == "" || formData.get('duration') == "" || formData.get('startdate') == "" || formData.get('enddate') == "") {
         // Handle validation errors
+        alert("All fields are required");
       } else {
         fetch('https://projectone-h83j.onrender.com/trip/create', {
           method: 'POST',
@@ -53,11 +50,11 @@
           return response.json();
         })
         .then(data => {
-          if(data.message === " done"){
+          if (data.message === " done") {
             alert(`${data.trip.tripname} added to trips`);
             event.target.reset(); // Reset the form fields
             console.log(data);
-          } else if(data.message === "trip exist"){
+          } else if (data.message === "trip exist") {
             alert(`This trip already exists`);
           }
         })
@@ -66,7 +63,7 @@
         });
       }
     });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
