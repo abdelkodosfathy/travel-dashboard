@@ -39,6 +39,7 @@
         // Handle validation errors
         alert("All fields are required");
       } else {
+        console.log("fetching");
         fetch('https://projectone-h83j.onrender.com/trip/create', {
           method: 'POST',
           body: formData,

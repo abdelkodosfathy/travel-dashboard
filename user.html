@@ -32,12 +32,6 @@
         <li class="nav-item">
           <a class="nav-link active" href="user.html">Booking</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link " href="trip_reservation.html">Trip Resevation</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="hotel_reservation.html">Hotel Resevation</a>
-        </li>
       </ul>
     </div>  
   </nav>
@@ -89,6 +83,7 @@
 
     </script>
     <script>
+
       // function sendEmail() {
       //   Email.send({
       //       Host: "smtp.gmail.com",
@@ -224,6 +219,7 @@
           })
           .then(function(response) {
             alert('Email sent successfully!');
+            location.reload();
           }, function(error) {
             console.log(error);
           });
@@ -245,6 +241,8 @@
         })
         .then(function(response) {
           alert('Email sent successfully!');
+          location.reload();
+
         }, function(error) {
           console.log(error);
         });
